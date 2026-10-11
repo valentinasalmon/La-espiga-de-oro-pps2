@@ -1,0 +1,16 @@
+{
+  "name": "la-espiga-de-oro",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Taller de requisitos La Espiga de Oro: recorrido para estudiantes, inscripción de equipos y votación del mejor equipo.",
+  "scripts": {
+    "dev": "node dev-server.js",
+    "test": "node scripts/smoke-test.js"
+  },
+  "dependencies": {
+    "@vercel/blob": "^1.0.0"
+  },
+  "engines": {
+    "node": "22.x"
+  }
+}

@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>La Espiga de Oro</title>
+<meta name="description" content="Taller de requisitos: ayudá a Marta a pedir la aplicación de su panadería.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/assets/app.css">
+</head>
+<body>
+
+<!-- Personajes dibujados a mano. El color de fondo viene de --av-bg. -->
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <defs><clipPath id="avclip"><circle cx="32" cy="32" r="32"/></clipPath></defs>
+
+  <symbol id="ch-marta" viewBox="0 0 64 64">
+    <circle cx="32" cy="32" r="32" fill="var(--av-bg)"/>
+    <g clip-path="url(#avclip)">
+      <path d="M8 66c1-13 11-21 24-21s23 8 24 21z" fill="#B4532A"/>
+      <path d="M22 66l2-17c2 2 5 3 8 3s6-1 8-3l2 17z" fill="#FFFFFF"/>
+      <rect x="28.5" y="40" width="7" height="8" rx="3" fill="#E3AE86"/>
+      <ellipse cx="32" cy="31" rx="10.5" ry="11.5" fill="#F3CDAB"/>
+      <path d="M21.5 31c-1.5-10 4-16 10.5-16s12 6 10.5 16c-1.2-6-4-9.5-10.5-9.5S22.7 25 21.5 31z" fill="#CFCAC4"/>
+      <ellipse cx="32" cy="14" rx="11.5" ry="7" fill="#FFFFFF"/>
+      <rect x="21" y="16.5" width="22" height="6" rx="2.5" fill="#FFFFFF"/>
+      <rect x="21" y="21" width="22" height="1.5" fill="#E3E8F1"/>
+      <circle cx="27.5" cy="31.5" r="1.5" fill="#3B2A22"/><circle cx="36.5" cy="31.5" r="1.5" fill="#3B2A22"/>
+      <circle cx="24.5" cy="35" r="2" fill="#F08E78" opacity=".55"/><circle cx="39.5" cy="35" r="2" fill="#F08E78" opacity=".55"/>
+      <path d="M28 36.5q4 4 8 0" stroke="#7A3E2A" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    </g>
+  </symbol>
+
+  <symbol id="ch-arq" viewBox="0 0 64 64">
+    <circle cx="32" cy="32" r="32" fill="var(--av-bg)"/>
+    <g clip-path="url(#avclip)">
+      <path d="M8 66c1-13 11-21 24-21s23 8 24 21z" fill="#25405E"/>
+      <path d="M25.5 46.5l6.5 10 6.5-10z" fill="#FFFFFF"/>
+      <rect x="28.5" y="40" width="7" height="8" rx="3" fill="#B97A55"/>
+      <ellipse cx="32" cy="33.5" rx="10.5" ry="11.5" fill="#CB8D66"/>
+      <path d="M20 26c0-9 5-14 12-14s12 5 12 14z" fill="#F4C430"/>
+      <rect x="30" y="11" width="4" height="14" rx="2" fill="#E5AE12"/>
+      <rect x="16.5" y="24" width="31" height="4.5" rx="2.2" fill="#E5AE12"/>
+      <circle cx="27.5" cy="33.5" r="3.8" fill="none" stroke="#1D2A3A" stroke-width="1.3"/><circle cx="36.5" cy="33.5" r="3.8" fill="none" stroke="#1D2A3A" stroke-width="1.3"/>
+      <path d="M31.3 33.5h1.4" stroke="#1D2A3A" stroke-width="1.3"/>
+      <circle cx="27.5" cy="33.5" r="1.3" fill="#2A1C16"/><circle cx="36.5" cy="33.5" r="1.3" fill="#2A1C16"/>
+      <path d="M28.5 39q3.5 3.5 7 0" stroke="#5A2E1E" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    </g>
+  </symbol>
+
+  <symbol id="ch-ges" viewBox="0 0 64 64">
+    <circle cx="32" cy="32" r="32" fill="var(--av-bg)"/>
+    <g clip-path="url(#avclip)">
+      <path d="M8 66c1-13 11-21 24-21s23 8 24 21z" fill="#3F2D7A"/>
+      <path d="M25.5 46.5l6.5 8 6.5-8z" fill="#FFFFFF"/>
+      <path d="M32 49l2.8 3.5L32 64l-2.8-11.5z" fill="#E0A526"/>
+      <rect x="28.5" y="40" width="7" height="8" rx="3" fill="#DBA582"/>
+      <ellipse cx="32" cy="31.5" rx="10.5" ry="11.5" fill="#EDBE9C"/>
+      <path d="M21 30c-1-10 4.5-16 11.5-16 7.5 0 11 5.5 10.5 16-1-4.5-3.5-8-7-9-4 2.5-9.5 3.5-15 9z" fill="#5A3A22"/>
+      <circle cx="27.5" cy="32" r="1.5" fill="#2E2018"/><circle cx="36.5" cy="32" r="1.5" fill="#2E2018"/>
+      <path d="M28.5 37q3.5 3.5 7 0" stroke="#7A3E2A" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+      <rect x="40" y="47" width="15" height="19" rx="2" fill="#EBD9AC"/><rect x="43.5" y="45" width="8" height="4.5" rx="1.2" fill="#7A6A4A"/>
+      <path d="M43 53h9M43 57h9M43 61h6" stroke="#9A8A64" stroke-width="1.1" stroke-linecap="round"/>
+    </g>
+  </symbol>
+</svg>
+
+<div class="wrap">
+
+<div class="bar" id="bar" hidden>
+  <span class="lbl" id="lbl"></span>
+  <div class="dots" id="dots"><i></i><i></i><i></i><i></i></div>
+  <button class="help" id="helpBtn" type="button">Ayuda</button>
+</div>
+
+<!-- INICIO E INSCRIPCIÓN -->
+<div id="v-intro">
+  <div class="full"><div class="awning"></div><div class="scallop"></div></div>
+  <div class="view">
+    <h1>La Espiga de Oro</h1>
+    <p>La Espiga de Oro es una panadería de barrio con tres sucursales. Su dueña, Marta, quiere una aplicación para vender pan a domicilio, pero todavía no sabe bien qué pedirle a quien la programe.</p>
+    <p class="lead">Ustedes son el equipo de análisis. Antes de que alguien escriba una línea de código, tienen que averiguar qué necesita de verdad.</p>
+
+    <div class="route">
+      <div><span class="n">1</span><span><b>Marta</b><small>La dueña cuenta qué quiere</small></span></div>
+      <div><span class="n">2</span><span><b>El arquitecto</b><small>Explica cómo se construye</small></span></div>
+      <div><span class="n">3</span><span><b>El gestor</b><small>Habla de plata y tiempo</small></span></div>
+      <div><span class="n">4</span><span><b>La perilla</b><small>Toman una decisión y la defienden</small></span></div>
+    </div>
+
+    <div class="card" id="signup">
+      <h3 style="margin-top:0">Inscriban a su equipo</h3>
+      <div id="signupMsg"></div>
+      <form id="signupForm" novalidate>
+        <div class="field">
+          <label for="teamName">Nombre del equipo</label>
+          <input id="teamName" name="teamName" type="text" maxlength="30" autocomplete="off" enterkeyhint="done" placeholder="Por ejemplo: Los Panaderos">
+        </div>
+        <button class="btn main block" id="signupBtn" type="submit">Inscribirnos</button>
+      </form>
+      <div id="signedUp" hidden>
+        <p class="msg ok" style="margin:0">Equipo inscripto: <b id="signedName"></b></p>
+      </div>
+    </div>
+    <p class="hint">Un solo integrante inscribe al equipo. El resto puede seguir desde su celular.</p>
+  </div>
+  <div class="dock"><button class="btn main" id="startBtn" type="button" data-go="marta" disabled>Empezar con Marta</button></div>
+</div>
+
+<!-- 1 MARTA -->
+<div id="v-marta" class="is-marta" hidden>
+  <div class="view">
+    <div class="who"><svg class="avbig" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-marta"/></svg><div><h2>Marta</h2><small>Dueña de la panadería</small></div></div>
+    <div class="todo"><b>En la hoja</b>Anoten 5 necesidades de Marta, con sus números.</div>
+    <div class="chat">
+      <div class="pair">
+        <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-marta"/></svg><div class="body"><span class="nm">Marta</span><div class="t">Hola, soy Marta, dueña de La Espiga de Oro. Tengo tres sucursales y quiero una aplicación para que la gente pida pan y se lo llevemos a casa. Quiero que sea rápida, segura y que nunca se caiga.</div></div></div>
+      </div>
+
+      <div class="pair">
+        <div class="m q"><div class="body"><span class="nm">Ustedes</span><div class="t">¿Qué quiere decir que sea rápida?</div></div></div>
+        <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-marta"/></svg><div class="body"><span class="nm">Marta</span><div class="t">Que el menú cargue sin hacer esperar, sobre todo a las ocho de la mañana, cuando hay mucha gente pidiendo. Calculo <b>150 personas</b> al mismo tiempo.</div></div></div>
+      </div>
+
+      <div class="pair">
+        <div class="m q"><div class="body"><span class="nm">Ustedes</span><div class="t">¿Qué no quiere que pase con la seguridad?</div></div></div>
+        <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-marta"/></svg><div class="body"><span class="nm">Marta</span><div class="t">Que nadie vea los datos de la tarjeta de mis clientes. Y que no entre cualquiera a cambiar los precios.</div></div></div>
+      </div>
+
+      <div class="pair">
+        <div class="m q"><div class="body"><span class="nm">Ustedes</span><div class="t">¿Cuándo sería grave que se caiga?</div></div></div>
+        <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-marta"/></svg><div class="body"><span class="nm">Marta</span><div class="t">De <b>7 a 10</b> de la mañana y de <b>5 a 7</b> de la tarde, que es cuando más vendo. Un sábado sin aplicación me duele mucho. Un rato de madrugada no me importa.</div></div></div>
+      </div>
+
+      <div class="pair">
+        <div class="m q"><div class="body"><span class="nm">Ustedes</span><div class="t">¿Cómo hace el pedido el cliente?</div></div></div>
+        <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-marta"/></svg><div class="body"><span class="nm">Marta</span><div class="t">Elige los productos, dice cuántos quiere, deja la dirección y paga. Con tarjeta o en efectivo cuando llega el repartidor.</div></div></div>
+      </div>
+
+      <div class="pair">
+        <div class="m q"><div class="body"><span class="nm">Ustedes</span><div class="t">¿Quién mira los pedidos en la panadería?</div></div></div>
+        <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-marta"/></svg><div class="body"><span class="nm">Marta</span><div class="t">Mis empleadas del mostrador. Tienen que ver los pedidos nuevos apenas entran y marcar si está en el horno, en camino o entregado.</div></div></div>
+      </div>
+
+      <div class="pair">
+        <div class="m q"><div class="body"><span class="nm">Ustedes</span><div class="t">¿Qué quiere ver el cliente después de pedir?</div></div></div>
+        <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-marta"/></svg><div class="body"><span class="nm">Marta</span><div class="t">En qué estado está su pedido, y que le llegue un aviso cuando sale el repartidor.</div></div></div>
+      </div>
+
+      <div class="pair">
+        <div class="m q"><div class="body"><span class="nm">Ustedes</span><div class="t">¿Quiénes usan la aplicación en el mostrador?</div></div></div>
+        <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-marta"/></svg><div class="body"><span class="nm">Marta</span><div class="t">Son <b>7 empleadas</b>, varias de más de cincuenta años, con una tablet. Tengo que poder enseñarles en un rato, porque no puedo cerrar un día.</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="dock"><button class="btn" data-go="intro" type="button" aria-label="Volver">‹</button><button class="btn main" data-go="arq" type="button">Siguiente: el arquitecto</button></div>
+</div>
+
+<!-- 2 ARQUITECTO -->
+<div id="v-arq" class="is-arq" hidden>
+  <div class="view">
+    <div class="who"><svg class="avbig" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-arq"/></svg><div><h2>El arquitecto</h2><small>Decide cómo se construye la aplicación</small></div></div>
+    <div class="todo"><b>En la hoja</b>Marquen cada necesidad como RF (lo que hace) o RNF (qué tan bien lo hace).</div>
+    <div class="chat">
+      <div class="pair">
+        <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-arq"/></svg><div class="body"><span class="nm">Arquitecto</span><div class="t">Hola, soy el arquitecto del proyecto. Me encargo de que la aplicación se pueda construir y funcione bien.</div></div></div>
+      </div>
+
+      <div class="pair">
+        <div class="m q"><div class="body"><span class="nm">Ustedes</span><div class="t">¿Cuánta gente la va a usar?</div></div></div>
+        <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-arq"/></svg><div class="body"><span class="nm">Arquitecto</span><div class="t">En los horarios de más ventas, hasta <b>150 personas</b> a la vez. Hay unos <b>300 pedidos por día</b> entre semana y unos <b>450</b> los fines de semana.</div></div></div>
+      </div>
+
+      <div class="pair">
+        <div class="m q"><div class="body"><span class="nm">Ustedes</span><div class="t">¿Qué pasa con los datos de las tarjetas?</div></div></div>
+        <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-arq"/></svg><div class="body"><span class="nm">Arquitecto</span><div class="t">No se guardan en la aplicación. Los maneja un servicio de pagos externo. Las contraseñas se guardan cifradas.</div></div></div>
+      </div>
+
+      <div class="pair">
+        <div class="m q"><div class="body"><span class="nm">Ustedes</span><div class="t">¿Qué es lo más difícil de lograr?</div></div></div>
+        <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-arq"/></svg><div class="body"><span class="nm">Arquitecto</span><div class="t">Que nunca se caiga. Cada vez que queremos que se caiga menos, hace falta más equipo y cuesta mucho más. Lo van a ver en la perilla.</div></div></div>
+      </div>
+
+      <div class="pair">
+        <div class="m q"><div class="body"><span class="nm">Ustedes</span><div class="t">¿Qué necesita de nosotros?</div></div></div>
+        <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-arq"/></svg><div class="body"><span class="nm">Arquitecto</span><div class="t">Que los pedidos tengan números. “Segura” no me sirve. “Bloquea la cuenta después de 5 contraseñas incorrectas” sí, porque sé cómo construirlo y cómo probarlo.</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="dock"><button class="btn" data-go="marta" type="button" aria-label="Volver">‹</button><button class="btn main" data-go="ges" type="button">Siguiente: el gestor</button></div>
+</div>
+
+<!-- 3 GESTOR -->
+<div id="v-ges" class="is-ges" hidden>
+  <div class="view">
+    <div class="who"><svg class="avbig" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-ges"/></svg><div><h2>El gestor</h2><small>Cuida el dinero y el tiempo del proyecto</small></div></div>
+    <div class="todo"><b>En la hoja</b>Escriban una historia de usuario y su criterio de aceptación. Si no recuerdan el formato, toquen Ayuda.</div>
+    <div class="chat">
+      <div class="pair">
+        <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-ges"/></svg><div class="body"><span class="nm">Gestor</span><div class="t">Hola, soy el gestor. Me encargo de que el proyecto salga con el dinero y el tiempo que tenemos.</div></div></div>
+      </div>
+
+      <div class="pair">
+        <div class="m q"><div class="body"><span class="nm">Ustedes</span><div class="t">¿Cuánto dinero y cuánto tiempo hay?</div></div></div>
+        <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-ges"/></svg><div class="body"><span class="nm">Gestor</span><div class="t"><b>12.000 dólares</b> para desarrollar y <b>4 meses</b>, con 2 programadores. Cuando la aplicación ya funciona, no podemos gastar más de <b>1.000 dólares por mes</b> en servidores.</div></div></div>
+      </div>
+
+      <div class="pair">
+        <div class="m q"><div class="body"><span class="nm">Ustedes</span><div class="t">¿Cuánto vende la aplicación?</div></div></div>
+        <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-ges"/></svg><div class="body"><span class="nm">Gestor</span><div class="t">En promedio, <b>1.200 dólares por día</b>.</div></div></div>
+      </div>
+
+      <div class="pair">
+        <div class="m q"><div class="body"><span class="nm">Ustedes</span><div class="t">¿Qué es lo más importante?</div></div></div>
+        <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-ges"/></svg><div class="body"><span class="nm">Gestor</span><div class="t">Que los clientes puedan pedir y pagar. Lo demás puede esperar a una segunda versión.</div></div></div>
+      </div>
+
+      <div class="pair">
+        <div class="m q"><div class="body"><span class="nm">Ustedes</span><div class="t">¿Cómo sabe que algo está terminado?</div></div></div>
+        <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-ges"/></svg><div class="body"><span class="nm">Gestor</span><div class="t">Tiene que poder comprobarse. Si me dicen “el pago funciona”, no alcanza. Si me dicen “cuando el cliente paga, ve la confirmación del pedido”, lo puedo probar y darlo por terminado.</div></div></div>
+      </div>
+
+      <div class="pair">
+        <div class="m q"><div class="body"><span class="nm">Ustedes</span><div class="t">¿Y si cambiamos algo más adelante?</div></div></div>
+        <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-ges"/></svg><div class="body"><span class="nm">Gestor</span><div class="t">Cambiarlo ahora sale barato. Cambiarlo cuando la aplicación ya está publicada sale mucho más caro.</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="dock"><button class="btn" data-go="arq" type="button" aria-label="Volver">‹</button><button class="btn main" data-go="def" type="button">Siguiente: la perilla</button></div>
+</div>
+
+<!-- 4 PERILLA Y DEFENSA -->
+<div id="v-def" hidden>
+  <div class="view">
+    <h2>La perilla de la disponibilidad</h2>
+    <p class="lead" style="margin-top:6px">La disponibilidad es el porcentaje del tiempo que la aplicación funciona. Muevan la perilla y miren qué pasa con el costo.</p>
+    <div class="todo"><b>En la hoja</b>Elijan un nivel y escriban los puntos de su defensa. Cada equipo la cuenta en 2 minutos.</div>
+
+    <div class="dial">
+      <span class="big" id="lvl">99 %</span>
+      <span class="hint">Disponibilidad elegida</span>
+      <input type="range" id="nivel" min="0" max="3" step="1" value="1" aria-label="Nivel de disponibilidad">
+      <div class="ticks"><span>95 %</span><span>99 %</span><span>99,9 %</span><span>99,99 %</span></div>
+      <div class="mini">
+        <div><span class="l">La aplicación estaría caída al año</span><span class="v" id="s-year"></span></div>
+        <div><span class="l">Servidores</span><span class="v" id="s-infra"></span></div>
+        <div><span class="l">Ventas perdidas al año</span><span class="v" id="s-loss"></span></div>
+      </div>
+      <p id="arq" style="margin:0 0 10px"></p>
+      <p id="flag" style="margin:0"></p>
+    </div>
+
+    <h3>¿Cuándo creen que se cae?</h3>
+    <div class="seg" role="group" aria-label="Cuándo se cae">
+      <button id="m-avg" type="button" aria-pressed="true">En cualquier momento del día</button>
+      <button id="m-peak" type="button" aria-pressed="false">En los horarios de más ventas</button>
+    </div>
+    <p class="hint" id="picoNote"></p>
+
+    <h3>Costo total de cada nivel</h3>
+    <div class="bars" id="bars"></div>
+    <div class="legend"><span><i style="background:var(--accent)"></i>Servidores al año</span><span><i style="background:var(--gold)"></i>Ventas perdidas al año</span></div>
+
+    <h3>Su defensa de 2 minutos</h3>
+    <ol class="steps">
+      <li><b>Qué eligieron:</b> el nivel de disponibilidad.</li>
+      <li><b>Por qué:</b> usen un número del caso.</li>
+      <li><b>El riesgo:</b> qué puede salir mal con esa decisión.</li>
+      <li><b>Lo que suponen:</b> algo que dan por cierto aunque no lo saben. Por ejemplo, cuándo se cae la aplicación.</li>
+    </ol>
+    <div class="frame">Elegimos [nivel] porque [número]. El riesgo es [riesgo]. Suponemos que [supuesto].</div>
+    <p class="hint" style="margin-top:10px">Pueden repartirse las partes entre el equipo. Hablen sin leer la hoja.</p>
+  </div>
+  <div class="dock"><button class="btn" data-go="ges" type="button" aria-label="Volver">‹</button><button class="btn main" data-go="fin" type="button">Terminé</button></div>
+</div>
+
+<!-- FINAL -->
+<div id="v-fin" hidden>
+  <div class="view" style="text-align:center">
+    <div class="done" aria-hidden="true">✓</div>
+    <h2>Completaron los cuatro pasos</h2>
+    <p class="lead" style="margin-top:8px"><span id="finTeam"></span>Terminen la hoja, ensayen la defensa de 2 minutos y esperen su turno.</p>
+  </div>
+  <div class="dock"><button class="btn" data-go="marta" type="button">Volver a leer</button></div>
+</div>
+
+<!-- AYUDA -->
+<div id="v-ayuda" hidden>
+  <div class="view">
+    <h2>Ayuda</h2>
+    <h3>RF y RNF</h3>
+    <div class="card"><p><b>RF, requisito funcional:</b> lo que hace la aplicación. Suele tener un verbo.</p><p class="hint">Ejemplo: permite pagar.</p></div>
+    <div class="card"><p><b>RNF, requisito no funcional:</b> qué tan bien lo hace. Suele tener un número o una cualidad.</p><p class="hint">Ejemplo: es segura, carga rápido, está siempre disponible.</p></div>
+
+    <h3>Historia de usuario</h3>
+    <div class="card"><p><span class="ph">Como</span> [quién] <span class="ph">quiero</span> [qué] <span class="ph">para</span> [para qué].</p>
+    <p class="hint" style="margin-top:8px">Ejemplo: Como cliente quiero pagar con tarjeta para no necesitar efectivo cuando llega el repartidor.</p></div>
+
+    <h3>Criterio de aceptación</h3>
+    <div class="card"><p><span class="ph">Dado</span> [la situación] <span class="ph">cuando</span> [la acción] <span class="ph">entonces</span> [lo que se puede comprobar].</p>
+    <p class="hint" style="margin-top:8px">Ejemplo: Dado un carrito con productos, cuando el cliente paga con una tarjeta válida, entonces ve la confirmación del pedido.</p></div>
+  </div>
+  <div class="dock"><button class="btn main" data-go="back" type="button">Volver</button></div>
+</div>
+
+</div>
+
+<script>
+(function () {
+  var $ = function (s) { return document.querySelector(s); };
+  var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+  var STEPS = ['marta', 'arq', 'ges', 'def'];
+  var cur = 'intro', prev = 'intro';
+  var TEAM_KEY = 'espiga-team';
+  var team = null;
+
+  function loadTeam() { try { team = JSON.parse(localStorage.getItem(TEAM_KEY) || 'null'); } catch (e) { team = null; } }
+  function saveTeam(t) { team = t; try { if (t) localStorage.setItem(TEAM_KEY, JSON.stringify(t)); else localStorage.removeItem(TEAM_KEY); } catch (e) {} }
+
+  /* ---------- navegación ---------- */
+  function show(id) {
+    if (id === 'ayuda') prev = cur;
+    cur = id;
+    $$('[id^="v-"]').forEach(function (v) { v.hidden = v.id !== 'v-' + id; });
+    var i = STEPS.indexOf(id), inStep = i > -1, inHelp = id === 'ayuda';
+    $('#bar').hidden = !(inStep || inHelp);
+    if (inStep) {
+      $('#lbl').textContent = 'Paso ' + (i + 1) + ' de 4';
+      $$('#dots i').forEach(function (d, k) { d.classList.toggle('on', k <= i); });
+      $('#dots').hidden = false;
+      $('#helpBtn').textContent = 'Ayuda';
+    } else if (inHelp) {
+      $('#lbl').textContent = 'Ayuda';
+      $('#dots').hidden = true;
+      $('#helpBtn').textContent = 'Cerrar';
+    }
+    if (id === 'fin') $('#finTeam').textContent = team ? 'Equipo ' + team.name + '. ' : '';
+    window.scrollTo(0, 0);
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-go]');
+    if (!b || b.disabled) return;
+    var t = b.dataset.go;
+    show(t === 'back' ? prev : t);
+  });
+  $('#helpBtn').addEventListener('click', function () { show(cur === 'ayuda' ? prev : 'ayuda'); });
+
+  /* ---------- inscripción ---------- */
+  var phase = null;
+  function setMsg(text, kind) {
+    var box = $('#signupMsg');
+    box.innerHTML = '';
+    if (!text) return;
+    var p = document.createElement('p');
+    p.className = 'msg ' + kind;
+    p.textContent = text;
+    box.appendChild(p);
+  }
+  function paintSignup() {
+    var registered = !!team;
+    $('#signupForm').hidden = registered || phase !== 'inscripcion';
+    $('#signedUp').hidden = !registered;
+    if (registered) $('#signedName').textContent = team.name;
+    var canStart = registered || (phase && phase !== 'inscripcion');
+    $('#startBtn').disabled = !canStart;
+    if (!registered && phase && phase !== 'inscripcion') {
+      setMsg('La inscripción ya cerró. Pueden leer el recorrido igual.', 'info');
+    }
+  }
+  function refresh() {
+    return fetch('/api/estado', { cache: 'no-store' })
+      .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || 'error'); return j; }); })
+      .then(function (s) {
+        phase = s.phase;
+        if (team && !s.teams.some(function (t) { return t.id === team.id; })) saveTeam(null);
+        setMsg('', '');
+        paintSignup();
+      })
+      .catch(function (err) {
+        setMsg(err && err.message && err.message !== 'Failed to fetch' ? err.message : 'No se pudo conectar. Revisen internet y recarguen la página.', 'err');
+      });
+  }
+  $('#signupForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var input = $('#teamName'), btn = $('#signupBtn');
+    var name = input.value.replace(/\s+/g, ' ').trim();
+    if (name.length < 2) { setMsg('Escriban un nombre de al menos 2 letras.', 'err'); input.focus(); return; }
+    btn.disabled = true; btn.textContent = 'Inscribiendo…';
+    fetch('/api/equipos', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name }) })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (res) {
+        if (!res.ok) { setMsg(res.j.error || 'No se pudo inscribir.', 'err'); return; }
+        saveTeam(res.j.team);
+        setMsg('', '');
+        paintSignup();
+      })
+      .catch(function () { setMsg('No se pudo conectar. Revisen internet y prueben de nuevo.', 'err'); })
+      .then(function () { btn.disabled = false; btn.textContent = 'Inscribirnos'; });
+  });
+
+  /* ---------- perilla ---------- */
+  var LV = [
+    { name: '95 %',    p: 95,    infra: 60,   arq: 'Un solo servidor y copias de seguridad hechas a mano. Si algo falla, lo arregla alguien cuando se entera.' },
+    { name: '99 %',    p: 99,    infra: 200,  arq: 'Un servidor con copias automáticas y un aviso cuando algo falla. Arreglarlo sigue siendo manual y puede llevar horas.' },
+    { name: '99,9 %',  p: 99.9,  infra: 900,  arq: 'Dos servidores. Si uno se cae, el otro sigue atendiendo solo.' },
+    { name: '99,99 %', p: 99.99, infra: 4500, arq: 'Servidores en varios lugares y un equipo de guardia las 24 horas. Es mucho más de lo que puede manejar un equipo de dos.' }
+  ];
+  var CAP = 1000, HOURS = 8760, AVG = 50, PEAK = 190;
+  var peak = false, idx = 1;
+  var nf0 = new Intl.NumberFormat('es-AR', { maximumFractionDigits: 0 });
+  var nf1 = new Intl.NumberFormat('es-AR', { maximumFractionDigits: 1 });
+  function money(v) { return 'US$ ' + nf0.format(Math.round(v)); }
+  function dur(h) {
+    if (h >= 48) return nf1.format(h / 24) + ' días';
+    if (h >= 1) return nf1.format(h) + ' horas';
+    return nf0.format(h * 60) + ' minutos';
+  }
+  function calc(l) {
+    var down = (100 - l.p) / 100 * HOURS, loss = down * (peak ? PEAK : AVG), infraYear = l.infra * 12;
+    return { down: down, loss: loss, infraYear: infraYear, total: infraYear + loss };
+  }
+  function render() {
+    var l = LV[idx], c = calc(l);
+    $('#lvl').textContent = l.name;
+    $('#s-year').textContent = dur(c.down);
+    $('#s-infra').textContent = money(l.infra) + ' por mes';
+    $('#s-loss').textContent = money(c.loss);
+    $('#arq').textContent = l.arq;
+    $('#flag').innerHTML = l.infra > CAP
+      ? '<span class="pill bad">Pasa el tope del gestor (' + money(CAP) + ' por mes)</span>'
+      : '<span class="pill good">Entra en el tope del gestor (' + money(CAP) + ' por mes)</span>';
+    $('#m-avg').setAttribute('aria-pressed', peak ? 'false' : 'true');
+    $('#m-peak').setAttribute('aria-pressed', peak ? 'true' : 'false');
+    $('#picoNote').textContent = peak
+      ? 'Cada hora caída en esos horarios cuesta ' + money(PEAK) + ' en ventas.'
+      : 'Cada hora caída cuesta ' + money(AVG) + ' en ventas, el promedio de un día completo.';
+    var all = LV.map(calc), max = Math.max.apply(null, all.map(function (x) { return x.total; }));
+    var html = '';
+    all.forEach(function (x, i) {
+      html += '<div class="brow' + (i === idx ? ' sel' : '') + '"><span class="nm">' + LV[i].name + '</span>' +
+        '<div class="track"><div class="si" style="width:' + (x.infraYear / max * 100).toFixed(2) + '%"></div><div class="sl" style="width:' + (x.loss / max * 100).toFixed(2) + '%"></div></div>' +
+        '<span class="tot">' + money(x.total) + ' al año</span></div>';
+    });
+    $('#bars').innerHTML = html;
+  }
+  $('#nivel').addEventListener('input', function (e) { idx = parseInt(e.target.value, 10); render(); });
+  $('#m-avg').addEventListener('click', function () { peak = false; render(); });
+  $('#m-peak').addEventListener('click', function () { peak = true; render(); });
+  render();
+
+  /* ---------- arranque ---------- */
+  loadTeam();
+  paintSignup();
+  show('intro');
+  refresh();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Votar | La Espiga de Oro</title>
+<meta name="description" content="Votá al equipo con la mejor defensa.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/assets/app.css">
+<style>
+  .opts{display:grid;gap:10px;margin:18px 0 0}
+  .opt{appearance:none;width:100%;text-align:left;display:flex;align-items:center;gap:14px;background:var(--surface);color:var(--fg);border:2px solid var(--line);border-radius:14px;padding:14px;min-height:68px;font-size:19px;font-weight:600;font-family:var(--f-display);cursor:pointer;overflow-wrap:anywhere}
+  .opt .dot{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;color:var(--accent-fg);font-size:15px}
+  .opt[aria-checked="true"]{border-color:var(--accent);background:var(--surface2)}
+  .opt[aria-checked="true"] .dot{background:var(--accent);border-color:var(--accent)}
+  .state{text-align:center;padding-block:36px 8px}
+  .state .badge{display:grid;place-items:center;width:84px;height:84px;border-radius:50%;margin:0 auto 18px;font-size:40px;background:var(--surface2)}
+  .state .badge.ok{background:var(--ok);color:#fff}
+  .winner{font-family:var(--f-display);font-size:30px;font-weight:700;color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="full"><div class="awning"></div><div class="scallop"></div></div>
+  <div class="view">
+    <h1>Votá al mejor equipo</h1>
+    <p class="lead">Elegí al equipo con la mejor defensa. Se vota una sola vez por celular.</p>
+    <div id="msg"></div>
+    <div id="stage"></div>
+  </div>
+  <div class="dock" id="dock" hidden><button class="btn main" id="voteBtn" type="button" disabled>Votar</button></div>
+</div>
+
+<script>
+(function () {
+  var $ = function (s) { return document.querySelector(s); };
+  var VOTER_KEY = 'espiga-voter';
+  var voter = '';
+  try { voter = localStorage.getItem(VOTER_KEY) || ''; } catch (e) {}
+  if (!/^[a-z0-9]{8,40}$/.test(voter)) {
+    var bytes = new Uint8Array(12);
+    (window.crypto || window.msCrypto).getRandomValues(bytes);
+    voter = Array.prototype.map.call(bytes, function (b) { return (b % 36).toString(36); }).join('');
+    try { localStorage.setItem(VOTER_KEY, voter); } catch (e) {}
+  }
+
+  var snap = null, selected = null, sending = false, lastSig = '';
+
+  function msg(text, kind) {
+    var box = $('#msg'); box.innerHTML = '';
+    if (!text) return;
+    var p = document.createElement('p'); p.className = 'msg ' + kind; p.textContent = text; box.appendChild(p);
+  }
+  function el(tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
+  function teamName(id) { var t = snap && snap.teams.filter(function (x) { return x.id === id; })[0]; return t ? t.name : ''; }
+
+  function stateBlock(badge, ok, title, text) {
+    var s = el('div', 'state');
+    s.appendChild(el('div', 'badge' + (ok ? ' ok' : ''), badge));
+    var h = el('h2', null, title); s.appendChild(h);
+    if (text) { var p = el('p', 'lead', text); p.style.marginTop = '8px'; s.appendChild(p); }
+    return s;
+  }
+
+  function paint() {
+    var stage = $('#stage'), dock = $('#dock');
+    var sig = JSON.stringify([snap.phase, snap.myVote, snap.teams.map(function (t) { return t.id; }), snap.results ? snap.winners : 0, selected]);
+    if (sig === lastSig) return;
+    lastSig = sig;
+    stage.innerHTML = '';
+    dock.hidden = true;
+
+    if (snap.phase === 'inscripcion') {
+      stage.appendChild(stateBlock('…', false, 'Todavía no abrió la votación', 'Esperen la indicación. Esta pantalla se actualiza sola.'));
+      return;
+    }
+    if (snap.phase === 'cerrada') {
+      var names = (snap.winners || []).map(teamName).filter(Boolean);
+      var block = stateBlock('★', false, 'La votación cerró', names.length ? '' : 'Mirá los resultados en la pantalla.');
+      if (names.length) {
+        block.appendChild(el('p', 'hint', names.length > 1 ? 'Empate entre:' : 'Ganó:'));
+        names.forEach(function (n) { block.appendChild(el('div', 'winner', n)); });
+      }
+      stage.appendChild(block);
+      return;
+    }
+    // votación abierta
+    if (snap.myVote) {
+      stage.appendChild(stateBlock('✓', true, 'Tu voto quedó registrado', 'Votaste a ' + (teamName(snap.myVote) || 'un equipo') + '. Gracias por participar.'));
+      return;
+    }
+    if (!snap.teams.length) {
+      stage.appendChild(stateBlock('…', false, 'Todavía no hay equipos', 'Vuelvan a mirar en un momento.'));
+      return;
+    }
+    var group = el('div', 'opts'); group.setAttribute('role', 'radiogroup'); group.setAttribute('aria-label', 'Equipos');
+    snap.teams.forEach(function (t) {
+      var b = el('button', 'opt'); b.type = 'button';
+      b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', selected === t.id ? 'true' : 'false');
+      var dot = el('span', 'dot', selected === t.id ? '✓' : ''); b.appendChild(dot);
+      b.appendChild(el('span', null, t.name));
+      b.addEventListener('click', function () { selected = t.id; lastSig = ''; paint(); });
+      group.appendChild(b);
+    });
+    stage.appendChild(group);
+    dock.hidden = false;
+    var vb = $('#voteBtn');
+    vb.disabled = !selected || sending;
+    vb.textContent = selected ? 'Votar a ' + teamName(selected) : 'Elegí un equipo';
+  }
+
+  function load() {
+    return fetch('/api/estado?voter=' + encodeURIComponent(voter), { cache: 'no-store' })
+      .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || 'error'); return j; }); })
+      .then(function (s) {
+        snap = s;
+        if (selected && !s.teams.some(function (t) { return t.id === selected; })) selected = null;
+        msg('', '');
+        paint();
+      })
+      .catch(function (err) {
+        if (!snap) msg(err && err.message && err.message !== 'Failed to fetch' ? err.message : 'No se pudo conectar. Revisá tu internet.', 'err');
+      });
+  }
+
+  $('#voteBtn').addEventListener('click', function () {
+    if (!selected || sending) return;
+    sending = true; $('#voteBtn').disabled = true; $('#voteBtn').textContent = 'Enviando…';
+    fetch('/api/votar', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ voter: voter, team: selected }) })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (res) {
+        if (!res.ok && res.j.error) msg(res.j.error, 'err'); else msg('', '');
+        lastSig = '';
+        return load();
+      })
+      .catch(function () { msg('No se pudo enviar. Revisá tu internet y probá de nuevo.', 'err'); })
+      .then(function () { sending = false; lastSig = ''; if (snap) paint(); });
+  });
+
+  load();
+  setInterval(function () { if (!sending) load(); }, 4000);
+})();
+</script>
+</body>
+</html>
