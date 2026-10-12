@@ -131,7 +131,6 @@
 <div id="v-marta" class="is-marta" hidden>
   <div class="view">
     <div class="todo"><b>En la hoja</b>Anoten 5 necesidades de Marta, con sus números.</div>
-    <div class="who"><svg class="avbig" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-marta"/></svg><div><h2>Marta</h2><small>Dueña de la panadería</small></div></div>
     <div class="chat">
       <div class="pair">
         <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-marta"/></svg><div class="body"><span class="nm">Marta</span><div class="t">Hola, soy Marta, dueña de La Espiga de Oro. Tengo tres sucursales y quiero una aplicación para que la gente pida pan y se lo llevemos a casa. Quiero que sea rápida, segura y que nunca se caiga.</div></div></div>
@@ -172,6 +171,7 @@
         <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-marta"/></svg><div class="body"><span class="nm">Marta</span><div class="t">Son <b>7 empleadas</b>, varias de más de cincuenta años, con una tablet. Tengo que poder enseñarles en un rato, porque no puedo cerrar un día.</div></div></div>
       </div>
     </div>
+    <div class="end" aria-hidden="true"></div>
   </div>
   <div class="dock"><button class="btn" data-go="intro" type="button" aria-label="Volver">‹</button><button class="btn main" data-go="arq" type="button">Siguiente: el arquitecto</button></div>
 </div>
@@ -180,7 +180,6 @@
 <div id="v-arq" class="is-arq" hidden>
   <div class="view">
     <div class="todo"><b>En la hoja</b>Marquen cada necesidad como RF (lo que hace) o RNF (qué tan bien lo hace).</div>
-    <div class="who"><svg class="avbig" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-arq"/></svg><div><h2>El arquitecto</h2><small>Decide cómo se construye la aplicación</small></div></div>
     <div class="chat">
       <div class="pair">
         <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-arq"/></svg><div class="body"><span class="nm">Arquitecto</span><div class="t">Hola, soy el arquitecto del proyecto. Me encargo de que la aplicación se pueda construir y funcione bien.</div></div></div>
@@ -206,6 +205,7 @@
         <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-arq"/></svg><div class="body"><span class="nm">Arquitecto</span><div class="t">Que los pedidos tengan números. “Segura” no me sirve. “Bloquea la cuenta después de 5 contraseñas incorrectas” sí, porque sé cómo construirlo y cómo probarlo.</div></div></div>
       </div>
     </div>
+    <div class="end" aria-hidden="true"></div>
   </div>
   <div class="dock"><button class="btn" data-go="marta" type="button" aria-label="Volver">‹</button><button class="btn main" data-go="ges" type="button">Siguiente: el gestor</button></div>
 </div>
@@ -214,7 +214,6 @@
 <div id="v-ges" class="is-ges" hidden>
   <div class="view">
     <div class="todo"><b>En la hoja</b>Escriban una historia de usuario y su criterio de aceptación. Si no recuerdan el formato, toquen Ayuda.</div>
-    <div class="who"><svg class="avbig" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-ges"/></svg><div><h2>El gestor</h2><small>Cuida el dinero y el tiempo del proyecto</small></div></div>
     <div class="chat">
       <div class="pair">
         <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-ges"/></svg><div class="body"><span class="nm">Gestor</span><div class="t">Hola, soy el gestor. Me encargo de que el proyecto salga con el dinero y el tiempo que tenemos.</div></div></div>
@@ -245,6 +244,7 @@
         <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-ges"/></svg><div class="body"><span class="nm">Gestor</span><div class="t">Cambiarlo ahora sale barato. Cambiarlo cuando la aplicación ya está publicada sale mucho más caro.</div></div></div>
       </div>
     </div>
+    <div class="end" aria-hidden="true"></div>
   </div>
   <div class="dock"><button class="btn" data-go="arq" type="button" aria-label="Volver">‹</button><button class="btn main" data-go="def" type="button">Siguiente: la perilla</button></div>
 </div>
@@ -299,12 +299,12 @@
 
 <!-- FINAL -->
 <div id="v-fin" hidden>
-  <div class="view" style="text-align:center">
+  <div class="view fin">
     <div class="done" aria-hidden="true">✓</div>
     <h2>Completaron los cuatro pasos</h2>
-    <p class="lead" style="margin-top:8px"><span id="finTeam"></span>Terminen la hoja, ensayen la defensa de 2 minutos y esperen su turno.</p>
+    <p class="lead"><span id="finTeam"></span>Terminen la hoja, ensayen la defensa de 2 minutos y esperen su turno.</p>
+    <button class="btn" data-go="marta" type="button">Volver a leer</button>
   </div>
-  <div class="dock"><button class="btn" data-go="marta" type="button">Volver a leer</button></div>
 </div>
 
 <!-- AYUDA -->
@@ -345,11 +345,16 @@
     if (id === 'ayuda') prev = cur;
     cur = id;
     $$('[id^="v-"]').forEach(function (v) { v.hidden = v.id !== 'v-' + id; });
-    var i = STEPS.indexOf(id), inStep = i > -1, inHelp = id === 'ayuda';
-    $('#bar').hidden = !(inStep || inHelp);
+    var i = STEPS.indexOf(id), inStep = i > -1, inHelp = id === 'ayuda', inFin = id === 'fin';
+    $('#bar').hidden = !(inStep || inHelp || inFin);
     if (inStep) {
       $('#lbl').textContent = 'Paso ' + (i + 1) + ' de 4';
       $$('#dots i').forEach(function (d, k) { d.classList.toggle('on', k <= i); });
+      $('#dots').hidden = false;
+      $('#helpBtn').textContent = 'Ayuda';
+    } else if (inFin) {
+      $('#lbl').textContent = 'Paso 4 de 4';
+      $$('#dots i').forEach(function (d) { d.classList.add('on'); });
       $('#dots').hidden = false;
       $('#helpBtn').textContent = 'Ayuda';
     } else if (inHelp) {
@@ -367,6 +372,19 @@
     show(t === 'back' ? prev : t);
   });
   $('#helpBtn').addEventListener('click', function () { show(cur === 'ayuda' ? prev : 'ayuda'); });
+
+  /* ---------- hay que leer todo el chat para seguir ---------- */
+  ['marta', 'arq', 'ges'].forEach(function (id) {
+    var v = $('#v-' + id), btn = v.querySelector('.dock .btn.main'), end = v.querySelector('.end');
+    var label = btn.textContent, read = false;
+    function lock() { btn.disabled = true; btn.textContent = 'Terminá de leer para seguir ↓'; }
+    function unlock() { read = true; btn.disabled = false; btn.textContent = label; }
+    if (!('IntersectionObserver' in window)) return;
+    lock();
+    new IntersectionObserver(function (entries) {
+      if (!read && entries.some(function (e) { return e.isIntersecting; })) unlock();
+    }, { rootMargin: '0px 0px -90px 0px' }).observe(end);
+  });
 
   /* ---------- inscripción ---------- */
   var phase = null;
