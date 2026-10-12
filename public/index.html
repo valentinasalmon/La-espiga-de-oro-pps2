@@ -79,16 +79,8 @@
 <div id="v-intro">
   <div class="full"><div class="awning"></div><div class="scallop"></div></div>
   <div class="view">
-    <h1>La Espiga de Oro</h1>
-    <p>La Espiga de Oro es una panadería de barrio con tres sucursales. Su dueña, Marta, quiere una aplicación para vender pan a domicilio, pero todavía no sabe bien qué pedirle a quien la programe.</p>
-    <p class="lead">Ustedes son el equipo de análisis. Antes de que alguien escriba una línea de código, tienen que averiguar qué necesita de verdad.</p>
-
-    <div class="route">
-      <div><span class="n">1</span><span><b>Marta</b><small>La dueña cuenta qué quiere</small></span></div>
-      <div><span class="n">2</span><span><b>El arquitecto</b><small>Explica cómo se construye</small></span></div>
-      <div><span class="n">3</span><span><b>El gestor</b><small>Habla de plata y tiempo</small></span></div>
-      <div><span class="n">4</span><span><b>La perilla</b><small>Toman una decisión y la defienden</small></span></div>
-    </div>
+    <h1 class="hero">La Espiga de Oro</h1>
+    <p class="lead big">Inscribí a tu equipo para empezar.</p>
 
     <div class="card" id="signup">
       <h3 style="margin-top:0">Inscriban a su equipo</h3>
@@ -112,7 +104,27 @@
     </div>
     <p class="hint">Cada equipo se inscribe una sola vez. Cualquiera puede abrir este enlace: si su equipo no está en la lista, inscríbanlo; si ya está, tóquenlo.</p>
   </div>
-  <div class="dock"><button class="btn main" id="startBtn" type="button" data-go="marta" disabled>Empezar con Marta</button></div>
+  <div class="dock"><button class="btn main" id="startBtn" type="button" data-go="act" disabled>Comenzar</button></div>
+</div>
+
+<!-- LA ACTIVIDAD -->
+<div id="v-act" hidden>
+  <div class="full"><div class="awning"></div><div class="scallop"></div></div>
+  <div class="view">
+    <h2 class="acth">¿Qué vamos a hacer?</h2>
+    <p>La Espiga de Oro es una panadería de barrio con tres sucursales. Su dueña, Marta, quiere una aplicación para vender pan a domicilio, pero todavía no sabe bien qué pedirle a quien la programe.</p>
+    <p class="lead">Ustedes son el equipo de análisis. Antes de que alguien escriba una línea de código, tienen que averiguar qué necesita de verdad.</p>
+
+    <h3>Con quiénes van a hablar</h3>
+    <div class="route">
+      <div class="is-marta"><svg class="avs" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-marta"/></svg><span><b>Marta</b><small>La dueña. Cuenta qué quiere para su panadería.</small></span></div>
+      <div class="is-arq"><svg class="avs" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-arq"/></svg><span><b>El arquitecto</b><small>Explica cómo se construye la aplicación.</small></span></div>
+      <div class="is-ges"><svg class="avs" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-ges"/></svg><span><b>El gestor</b><small>Cuida el dinero y el tiempo del proyecto.</small></span></div>
+      <div><span class="n">4</span><span><b>La perilla</b><small>Ustedes toman una decisión y la defienden en 2 minutos.</small></span></div>
+    </div>
+    <p class="hint">Lo que averigüen lo escriben en la hoja del equipo.</p>
+  </div>
+  <div class="dock"><button class="btn" data-go="intro" type="button" aria-label="Volver">‹</button><button class="btn main" data-go="marta" type="button">Empezar con Marta</button></div>
 </div>
 
 <!-- 1 MARTA -->

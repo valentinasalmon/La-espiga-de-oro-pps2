@@ -150,3 +150,10 @@ input[type=range]{width:100%;accent-color:var(--accent);margin:14px 0 6px;height
 
 button.chip{font:inherit;color:var(--fg);cursor:pointer;min-height:44px}
 .chip.mine{border-color:var(--accent);background:var(--surface2);font-weight:600}
+
+/* inicio y actividad */
+h1.hero{font-size:clamp(48px,15vw,66px);line-height:.98;margin:22px 0 14px}
+.lead.big{font-size:20px;margin-bottom:22px}
+.acth{margin:22px 0 12px;font-size:30px}
+.route .avs{flex:none;width:46px;height:46px;border-radius:50%}
+.route .is-marta b,.route .is-arq b,.route .is-ges b{color:var(--c)}
