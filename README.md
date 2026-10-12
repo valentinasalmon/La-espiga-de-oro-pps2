@@ -23,7 +23,7 @@ Se cambian desde `/resultados` → **Administrar** → ingresar el PIN.
 ## Publicar en Vercel (cuenta nueva)
 
 1. En Vercel: **Add New → Project → Import Git Repository** y elegir este repo. No hace falta tocar el build.
-2. En el proyecto: **Storage → Create → Blob**. Elegir acceso **Public** y conectarlo al proyecto (agrega solo `BLOB_READ_WRITE_TOKEN`).
+2. En el proyecto: **Storage → Create → Blob**. Elegir acceso **Public** y conectarlo al proyecto (agrega `BLOB_STORE_ID`; con eso alcanza, no hace falta el token).
 3. **Settings → Environment Variables**: crear `ADMIN_PIN` con el PIN que quieras.
 4. **Deployments → Redeploy** para que tome las variables.
 5. Abrir `/resultados`: los QR ya apuntan al dominio real.
