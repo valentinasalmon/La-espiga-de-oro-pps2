@@ -88,7 +88,7 @@ p{margin:0 0 12px}
 .who h2{color:var(--c)}
 .who small{display:block;color:var(--muted);font-size:14px}
 .avbig{flex:none;width:68px;height:68px;border-radius:50%}
-.todo{background:var(--gold-bg);border-radius:12px;padding:12px 14px;font-size:16px;margin:0 0 26px}
+.todo{background:var(--gold-bg);border-radius:12px;padding:12px 14px;font-size:16px;margin:0 0 20px}
 .todo b{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:2px}
 
 /* chat */
@@ -141,3 +141,9 @@ input[type=range]{width:100%;accent-color:var(--accent);margin:14px 0 6px;height
 .done{display:grid;place-items:center;width:84px;height:84px;border-radius:50%;background:var(--ok);color:#fff;font-size:44px;margin:30px auto 16px}
 
 @media (prefers-reduced-motion:no-preference){.track div{transition:width .25s ease}}
+
+/* defensa: recuadro al final de la perilla */
+.defensa{margin-top:56px;background:var(--surface);border:2px solid var(--accent);border-radius:18px;padding:18px 16px}
+.defensa .tag{display:inline-block;font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:var(--accent);color:var(--accent-fg);border-radius:99px;padding:3px 10px;margin-bottom:10px}
+.defensa .steps{margin-top:12px}
+.defensa .frame{background:var(--surface2)}

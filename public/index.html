@@ -112,8 +112,8 @@
 <!-- 1 MARTA -->
 <div id="v-marta" class="is-marta" hidden>
   <div class="view">
-    <div class="who"><svg class="avbig" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-marta"/></svg><div><h2>Marta</h2><small>Dueña de la panadería</small></div></div>
     <div class="todo"><b>En la hoja</b>Anoten 5 necesidades de Marta, con sus números.</div>
+    <div class="who"><svg class="avbig" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-marta"/></svg><div><h2>Marta</h2><small>Dueña de la panadería</small></div></div>
     <div class="chat">
       <div class="pair">
         <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-marta"/></svg><div class="body"><span class="nm">Marta</span><div class="t">Hola, soy Marta, dueña de La Espiga de Oro. Tengo tres sucursales y quiero una aplicación para que la gente pida pan y se lo llevemos a casa. Quiero que sea rápida, segura y que nunca se caiga.</div></div></div>
@@ -161,8 +161,8 @@
 <!-- 2 ARQUITECTO -->
 <div id="v-arq" class="is-arq" hidden>
   <div class="view">
-    <div class="who"><svg class="avbig" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-arq"/></svg><div><h2>El arquitecto</h2><small>Decide cómo se construye la aplicación</small></div></div>
     <div class="todo"><b>En la hoja</b>Marquen cada necesidad como RF (lo que hace) o RNF (qué tan bien lo hace).</div>
+    <div class="who"><svg class="avbig" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-arq"/></svg><div><h2>El arquitecto</h2><small>Decide cómo se construye la aplicación</small></div></div>
     <div class="chat">
       <div class="pair">
         <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-arq"/></svg><div class="body"><span class="nm">Arquitecto</span><div class="t">Hola, soy el arquitecto del proyecto. Me encargo de que la aplicación se pueda construir y funcione bien.</div></div></div>
@@ -195,8 +195,8 @@
 <!-- 3 GESTOR -->
 <div id="v-ges" class="is-ges" hidden>
   <div class="view">
-    <div class="who"><svg class="avbig" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-ges"/></svg><div><h2>El gestor</h2><small>Cuida el dinero y el tiempo del proyecto</small></div></div>
     <div class="todo"><b>En la hoja</b>Escriban una historia de usuario y su criterio de aceptación. Si no recuerdan el formato, toquen Ayuda.</div>
+    <div class="who"><svg class="avbig" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-ges"/></svg><div><h2>El gestor</h2><small>Cuida el dinero y el tiempo del proyecto</small></div></div>
     <div class="chat">
       <div class="pair">
         <div class="m a"><svg class="av" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-ges"/></svg><div class="body"><span class="nm">Gestor</span><div class="t">Hola, soy el gestor. Me encargo de que el proyecto salga con el dinero y el tiempo que tenemos.</div></div></div>
@@ -234,9 +234,9 @@
 <!-- 4 PERILLA Y DEFENSA -->
 <div id="v-def" hidden>
   <div class="view">
+    <div class="todo"><b>En la hoja</b>Elijan un nivel y escriban los puntos de su defensa. Cada equipo la cuenta en 2 minutos.</div>
     <h2>La perilla de la disponibilidad</h2>
     <p class="lead" style="margin-top:6px">La disponibilidad es el porcentaje del tiempo que la aplicación funciona. Muevan la perilla y miren qué pasa con el costo.</p>
-    <div class="todo"><b>En la hoja</b>Elijan un nivel y escriban los puntos de su defensa. Cada equipo la cuenta en 2 minutos.</div>
 
     <div class="dial">
       <span class="big" id="lvl">99 %</span>
@@ -263,15 +263,18 @@
     <div class="bars" id="bars"></div>
     <div class="legend"><span><i style="background:var(--accent)"></i>Servidores al año</span><span><i style="background:var(--gold)"></i>Ventas perdidas al año</span></div>
 
-    <h3>Su defensa de 2 minutos</h3>
-    <ol class="steps">
-      <li><b>Qué eligieron:</b> el nivel de disponibilidad.</li>
-      <li><b>Por qué:</b> usen un número del caso.</li>
-      <li><b>El riesgo:</b> qué puede salir mal con esa decisión.</li>
-      <li><b>Lo que suponen:</b> algo que dan por cierto aunque no lo saben. Por ejemplo, cuándo se cae la aplicación.</li>
-    </ol>
-    <div class="frame">Elegimos [nivel] porque [número]. El riesgo es [riesgo]. Suponemos que [supuesto].</div>
-    <p class="hint" style="margin-top:10px">Pueden repartirse las partes entre el equipo. Hablen sin leer la hoja.</p>
+    <section class="defensa" aria-labelledby="defTitle">
+      <span class="tag">Al final</span>
+      <h2 id="defTitle">Su defensa de 2 minutos</h2>
+      <ol class="steps">
+        <li><b>Qué eligieron:</b> el nivel de disponibilidad.</li>
+        <li><b>Por qué:</b> usen un número del caso.</li>
+        <li><b>El riesgo:</b> qué puede salir mal con esa decisión.</li>
+        <li><b>Lo que suponen:</b> algo que dan por cierto aunque no lo saben. Por ejemplo, cuándo se cae la aplicación.</li>
+      </ol>
+      <div class="frame">Elegimos [nivel] porque [número]. El riesgo es [riesgo]. Suponemos que [supuesto].</div>
+      <p class="hint" style="margin:12px 0 0">Pueden repartirse las partes entre el equipo. Hablen sin leer la hoja.</p>
+    </section>
   </div>
   <div class="dock"><button class="btn" data-go="ges" type="button" aria-label="Volver">‹</button><button class="btn main" data-go="fin" type="button">Terminé</button></div>
 </div>
