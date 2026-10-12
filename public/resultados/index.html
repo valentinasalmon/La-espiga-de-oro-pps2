@@ -20,6 +20,8 @@
   .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(24px,6vw,110px);align-items:start;margin-top:clamp(24px,min(6vw,7vh),96px)}
   .grid3{display:grid;grid-template-columns:minmax(0,1fr) clamp(240px,26vw,440px) minmax(0,1fr);gap:clamp(24px,5vw,90px);align-items:start;margin-top:clamp(24px,min(6vw,7vh),96px)}
   @media (max-width:900px){.grid3{grid-template-columns:minmax(0,1fr)}}
+  .left .phase{font-size:clamp(15px,1.8vw,28px);color:var(--fg);margin-bottom:clamp(12px,1.6vw,24px);max-width:22ch}
+  .left .qrbox{margin-left:0;width:min(100%,360px,calc(100vh - 430px));min-width:170px}
   .center{text-align:center}
   .center .phase{font-size:clamp(15px,1.8vw,28px);color:var(--fg);margin-bottom:clamp(12px,1.6vw,24px)}
   .center .qrbox{margin-inline:auto;width:min(100%,340px,calc(100vh - 430px));min-width:170px}
@@ -46,8 +48,19 @@
   .empty{color:var(--muted)}
   /* ganador */
   .winbox{text-align:center;padding-top:clamp(16px,4vh,60px)}
-  .winbox .winlabel{font-size:clamp(20px,3vw,48px);color:var(--fg)}
-  .winbox .rank{max-width:900px;margin-inline:auto;text-align:left;margin-top:clamp(28px,6vh,80px)}
+  .winbox .winlabel{font-size:clamp(28px,5vw,84px);color:var(--fg)}
+  .winbox .winname{font-size:clamp(56px,13vw,230px);margin:clamp(10px,2vh,28px) 0 0;color:var(--gold);text-shadow:0 0 40px rgba(240,192,80,.35)}
+  .winbox .rank{margin-top:clamp(70px,16vh,190px)}
+  .winbox .rank .phase{text-align:center;margin-bottom:6px}
+  @media (prefers-reduced-motion:no-preference){
+    .pop{animation:pop .7s cubic-bezier(.2,1.4,.4,1) both}
+    .reveal{opacity:0;animation:reveal .9s cubic-bezier(.2,1.5,.4,1) 1.3s forwards}
+    .late{opacity:0;animation:fadein .8s ease 2.8s forwards}
+    @keyframes pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+    @keyframes reveal{0%{opacity:0;transform:scale(.3) rotate(-4deg)}70%{opacity:1;transform:scale(1.12) rotate(1deg)}100%{opacity:1;transform:none}}
+    @keyframes fadein{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  }
+  .winbox .rank{max-width:900px;margin-inline:auto;text-align:left}
   .winlabel{font-family:var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-size:clamp(14px,1.6vw,24px);margin-top:clamp(18px,3vw,40px)}
   .winname{font-family:var(--f-display);font-weight:700;font-size:clamp(44px,9vw,130px);line-height:1;margin:10px 0 6px;color:var(--accent);text-wrap:balance;overflow-wrap:anywhere}
   .rank{display:grid;gap:12px;margin-top:28px}
@@ -124,30 +137,60 @@
     return ul;
   }
   function stageSignup(s) {
-    var g = el('div', 'grid3');
-    var center = el('div', 'center');
+    var g = el('div', 'grid');
+    var center = el('div', 'left');
     center.appendChild(el('div', 'phase', 'Escaneá para ingresar'));
     center.appendChild(qrBlock('/', 'Código QR para inscribirse'));
     var right = el('div', 'side');
     right.appendChild(el('div', 'phase', 'Equipos inscriptos'));
     if (!s.teams.length) right.appendChild(el('p', 'empty', 'Esperando equipos…'));
     else right.appendChild(roster(s.teams));
-    g.appendChild(el('div')); g.appendChild(center); g.appendChild(right);
+    g.appendChild(center); g.appendChild(right);
     return g;
   }
   function stageVoting(s) {
-    var g = el('div', 'grid3');
-    var center = el('div', 'center');
+    var g = el('div', 'grid');
+    var center = el('div', 'left');
     center.appendChild(el('div', 'phase', 'Llegó la hora de votar al mejor equipo'));
     center.appendChild(qrBlock('/votar', 'Código QR para votar'));
     var right = el('div', 'side');
-    var end = el('button', 'btn main bigbtn first', 'Cerrar votación'); end.type = 'button';
+    right.appendChild(el('div', 'phase', 'Equipos en competencia'));
+    right.appendChild(roster(s.teams));
+    var end = el('button', 'btn main bigbtn', 'Cerrar votación'); end.type = 'button';
     end.addEventListener('click', function () { goPhase('cerrada'); });
     right.appendChild(end);
-    right.appendChild(el('div', 'phase', 'Equipos'));
-    right.appendChild(roster(s.teams));
-    g.appendChild(el('div')); g.appendChild(center); g.appendChild(right);
+    g.appendChild(center); g.appendChild(right);
     return g;
+  }
+  var revealTimer = null;
+  function confetti() {
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var cv = document.createElement('canvas');
+    cv.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:15';
+    document.body.appendChild(cv);
+    var W = cv.width = window.innerWidth, H = cv.height = window.innerHeight, ctx = cv.getContext('2d');
+    var colors = ['#F2C14E', '#7FA8F0', '#FFFFFF', '#F08A74', '#6FD3A0', '#C9D8F5'];
+    var parts = [];
+    for (var i = 0; i < 260; i++) {
+      var fromLeft = i % 2 === 0;
+      parts.push({
+        x: fromLeft ? -10 : W + 10, y: H * (0.25 + Math.random() * 0.2),
+        vx: (fromLeft ? 1 : -1) * (6 + Math.random() * 14), vy: -(8 + Math.random() * 14),
+        w: 8 + Math.random() * 10, h: 5 + Math.random() * 8, r: Math.random() * 6, vr: (Math.random() - .5) * .4,
+        c: colors[(Math.random() * colors.length) | 0]
+      });
+    }
+    var t0 = performance.now();
+    (function frame(now) {
+      var t = now - t0;
+      ctx.clearRect(0, 0, W, H);
+      parts.forEach(function (q) {
+        q.vy += 0.35; q.vx *= 0.992; q.x += q.vx; q.y += q.vy; q.r += q.vr;
+        ctx.save(); ctx.translate(q.x, q.y); ctx.rotate(q.r); ctx.fillStyle = q.c;
+        ctx.globalAlpha = Math.max(0, 1 - t / 7000); ctx.fillRect(-q.w / 2, -q.h / 2, q.w, q.h); ctx.restore();
+      });
+      if (t < 7000) requestAnimationFrame(frame); else cv.remove();
+    })(t0);
   }
   function stageResults(s) {
     var box = el('div', 'winbox');
@@ -157,9 +200,10 @@
       box.appendChild(el('div', 'winlabel', 'Nadie votó'));
       return box;
     }
-    box.appendChild(el('div', 'winlabel', winners.length > 1 ? 'Empate entre' : 'El ganador es'));
-    box.appendChild(el('div', 'winname', winners.map(function (w) { return w.name; }).join(' y ')));
-    var max = results[0].votes || 1, rank = el('div', 'rank');
+    box.appendChild(el('div', 'winlabel pop', winners.length > 1 ? 'Empate entre…' : 'El ganador es…'));
+    box.appendChild(el('div', 'winname reveal', winners.map(function (w) { return w.name; }).join(' y ')));
+    var max = results[0].votes || 1, rank = el('div', 'rank late');
+    rank.appendChild(el('div', 'phase', 'Recuento de votos'));
     results.forEach(function (r) {
       var row = el('div', 'rrow' + (winners.indexOf(r) > -1 ? ' win' : ''));
       row.appendChild(el('div', 'nm', r.name));
@@ -169,6 +213,8 @@
       rank.appendChild(row);
     });
     box.appendChild(rank);
+    clearTimeout(revealTimer);
+    revealTimer = setTimeout(confetti, 1500);
     return box;
   }
 
@@ -178,6 +224,7 @@
     if (sig === lastSig) return;
     lastSig = sig;
     $('#phase').textContent = '';
+    if (s.phase !== 'cerrada') clearTimeout(revealTimer);
     var stage = $('#stage'); stage.innerHTML = '';
     stage.appendChild(s.phase === 'inscripcion' ? stageSignup(s) : s.phase === 'votacion' ? stageVoting(s) : stageResults(s));
   }
