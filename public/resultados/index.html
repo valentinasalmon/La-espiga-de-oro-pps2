@@ -21,7 +21,11 @@
   .side .phase{font-size:clamp(15px,1.8vw,28px);color:var(--fg);margin-bottom:clamp(12px,1.6vw,24px)}
   .roster{list-style:none;margin:0;padding:0;display:grid;gap:clamp(8px,1vw,14px)}
   .roster li{font-family:var(--f-display);font-weight:600;font-size:clamp(20px,2.8vw,44px);line-height:1.15;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:clamp(8px,1vw,16px) clamp(14px,1.8vw,28px);overflow-wrap:anywhere}
+  .roster.cols{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .roster.cols li{font-size:clamp(16px,2vw,32px)}
   .roster li.new{border-color:var(--accent)}
+  .bigbtn{margin-top:clamp(16px,2.4vw,36px);min-height:clamp(54px,6vw,84px);font-size:clamp(18px,2.2vw,34px);padding:0 clamp(20px,2.6vw,40px);font-family:var(--f-display);width:100%}
+  .votes{font-family:var(--f-mono);font-size:clamp(16px,1.8vw,28px);color:var(--muted);margin:clamp(12px,1.6vw,22px) 0 0}
   @media (max-width:760px){.grid{grid-template-columns:minmax(0,1fr)}}
   .big-title{font-family:var(--f-display);font-weight:700;font-size:clamp(28px,min(4.4vw,6.5vh),60px);line-height:1.05;margin:0 0 10px;text-wrap:balance}
   .qrbox{background:#fff;border-radius:18px;padding:clamp(12px,1.6vw,22px);width:min(100%,clamp(200px,28vw,380px),calc(100vh - 400px));min-width:180px;margin-top:16px}
@@ -112,24 +116,31 @@
     if (!s.teams.length) {
       right.appendChild(el('p', 'empty', 'Esperando equipos…'));
     } else {
-      var ul = el('ul', 'roster');
+      var ul = el('ul', 'roster' + (s.teams.length > 4 ? ' cols' : ''));
       s.teams.forEach(function (t) { ul.appendChild(el('li', null, t.name)); });
       right.appendChild(ul);
     }
+    var go = el('button', 'btn main bigbtn', 'Llegó la hora de votar'); go.type = 'button';
+    go.addEventListener('click', function () { goPhase('votacion'); });
+    right.appendChild(go);
     g.appendChild(left); g.appendChild(right);
     return g;
   }
   function stageVoting(s) {
     var g = el('div', 'grid');
     var left = el('div');
-    left.appendChild(el('h2', 'big-title', 'Voten al mejor equipo'));
-    left.appendChild(el('p', 'lead', 'Escaneen el código. Un solo voto por celular.'));
+    left.appendChild(el('h2', 'big-title', 'Llegó la hora de votar'));
+    left.appendChild(el('p', 'lead', 'Escaneen el código y voten al mejor equipo. Un solo voto por persona.'));
     left.appendChild(qrBlock('/votar', 'Código QR para votar'));
-    var right = el('div');
-    right.appendChild(el('div', 'phase', 'Votos recibidos'));
-    right.appendChild(el('div', 'count', String(s.totalVotes)));
+    var right = el('div', 'side');
     right.appendChild(el('div', 'phase', 'Equipos en competencia'));
-    right.appendChild(chips(s.teams));
+    var ul = el('ul', 'roster' + (s.teams.length > 4 ? ' cols' : ''));
+    s.teams.forEach(function (t) { ul.appendChild(el('li', null, t.name)); });
+    right.appendChild(ul);
+    right.appendChild(el('p', 'votes', 'Votos recibidos: ' + s.totalVotes));
+    var end = el('button', 'btn bigbtn', 'Cerrar votación y mostrar ganador'); end.type = 'button';
+    end.addEventListener('click', function () { goPhase('cerrada'); });
+    right.appendChild(end);
     g.appendChild(left); g.appendChild(right);
     return g;
   }
@@ -180,7 +191,7 @@
   }
 
   /* ---------- administración ---------- */
-  var pin = '', adminSnap = null, showTally = false, confirmReset = false;
+  var pin = '', adminSnap = null, showTally = false, confirmReset = false, pending = null;
   var panel = $('#panel'), panelIn = $('#panelIn');
 
   function api(action, extra) {
@@ -193,7 +204,7 @@
   }
   function drawLogin() {
     panelIn.innerHTML = '';
-    panelIn.appendChild(el('h3', null, 'Administrar'));
+    panelIn.appendChild(el('h3', null, pending === 'votacion' ? 'PIN para abrir la votación' : pending === 'cerrada' ? 'PIN para mostrar el ganador' : 'Administrar'));
     var note0 = el('div', 'note'); panelIn.appendChild(note0);
     var f = el('form'); f.noValidate = true;
     var field = el('div', 'field');
@@ -202,11 +213,18 @@
     field.appendChild(lab); field.appendChild(inp); f.appendChild(field);
     var row = el('div', 'row');
     var go = el('button', 'btn main sm', 'Entrar'); go.type = 'submit';
-    var close = el('button', 'btn sm', 'Cerrar'); close.type = 'button'; close.addEventListener('click', function () { panel.hidden = true; });
+    var close = el('button', 'btn sm', 'Cerrar'); close.type = 'button'; close.addEventListener('click', function () { pending = null; panel.hidden = true; });
     row.appendChild(go); row.appendChild(close); f.appendChild(row); panelIn.appendChild(f);
     f.addEventListener('submit', function (e) {
       e.preventDefault(); pin = inp.value;
-      api('check').then(function (s) { adminSnap = s; drawControls(); })
+      api('check').then(function (s) {
+        adminSnap = s;
+        if (pending) {
+          var v = pending; pending = null;
+          return api('phase', { value: v }).then(function (s2) { adminSnap = s2; panel.hidden = true; load(); });
+        }
+        drawControls();
+      })
         .catch(function (err) { pin = ''; note(err.message === 'Failed to fetch' ? 'Sin conexión.' : err.message, 'err'); });
     });
     setTimeout(function () { inp.focus(); }, 0);
@@ -266,7 +284,13 @@
     r2.appendChild(close);
     panelIn.appendChild(r2);
   }
+  function goPhase(value) {
+    function login() { pending = value; pin = ''; adminSnap = null; panel.hidden = false; drawLogin(); }
+    if (!(pin && adminSnap)) return login();
+    api('phase', { value: value }).then(function (s) { adminSnap = s; load(); }).catch(login);
+  }
   $('#adminBtn').addEventListener('click', function () {
+    pending = null;
     panel.hidden = !panel.hidden;
     if (!panel.hidden) { if (pin && adminSnap) drawControls(); else drawLogin(); }
   });
