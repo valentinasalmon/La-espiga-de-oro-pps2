@@ -11,14 +11,18 @@
 <link rel="stylesheet" href="/assets/app.css">
 <style>
   /* Pensada para el proyector: tipografía grande que se adapta al ancho. */
-  :root{--oro:#C28A00}
-  @media (prefers-color-scheme: dark){:root{--oro:#F2C14E}}
+  :root{--bg:#0E1524;--surface:#162036;--surface2:#1E2A45;--fg:#E8EEFA;--muted:#9AA9C6;--line:#2B3A5C;--accent:#7FA8F0;--accent-fg:#0A1A38;--awn2:#C9D8F5;--gold:#F0C050;--ok:#6FD3A0;--ok-bg:#12332A;--bad:#F08A74;--bad-bg:#3A1C15;color-scheme:dark}
   body{font-size:clamp(17px,1.5vw,24px)}
   .stagewrap{max-width:1760px;margin-inline:auto}
   .top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:22px 6px}
-  .top h1{color:var(--oro);font-size:clamp(44px,min(8.5vw,14vh),128px);line-height:.98;margin:0}
+  .top h1{color:#fff;font-size:clamp(44px,min(8.5vw,14vh),128px);line-height:.98;margin:0}
   .phase{font-family:var(--f-mono);font-size:clamp(13px,1.3vw,20px);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
   .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(24px,6vw,110px);align-items:start;margin-top:clamp(24px,min(6vw,7vh),96px)}
+  .grid3{display:grid;grid-template-columns:minmax(0,1fr) clamp(240px,26vw,440px) minmax(0,1fr);gap:clamp(24px,5vw,90px);align-items:start;margin-top:clamp(24px,min(6vw,7vh),96px)}
+  @media (max-width:900px){.grid3{grid-template-columns:minmax(0,1fr)}}
+  .center{text-align:center}
+  .center .phase{font-size:clamp(15px,1.8vw,28px);color:var(--fg);margin-bottom:clamp(12px,1.6vw,24px)}
+  .center .qrbox{margin-inline:auto;width:min(100%,340px,calc(100vh - 430px));min-width:170px}
   .side{padding-top:clamp(0px,5vw,90px)}
   .side .phase{font-size:clamp(15px,1.8vw,28px);color:var(--fg);margin-bottom:clamp(12px,1.6vw,24px)}
   .scan{font-family:var(--f-display);font-weight:700;font-size:clamp(22px,min(3vw,5.2vh),50px);line-height:1.12;margin:0 0 10px;text-wrap:balance;max-width:20ch}
@@ -41,6 +45,9 @@
   .teams .chip{font-family:var(--f-display);font-weight:600;font-size:clamp(17px,2vw,30px);padding:clamp(6px,.8vw,12px) clamp(14px,1.6vw,24px)}
   .empty{color:var(--muted)}
   /* ganador */
+  .winbox{text-align:center;padding-top:clamp(16px,4vh,60px)}
+  .winbox .winlabel{font-size:clamp(20px,3vw,48px);color:var(--fg)}
+  .winbox .rank{max-width:900px;margin-inline:auto;text-align:left;margin-top:clamp(28px,6vh,80px)}
   .winlabel{font-family:var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-size:clamp(14px,1.6vw,24px);margin-top:clamp(18px,3vw,40px)}
   .winname{font-family:var(--f-display);font-weight:700;font-size:clamp(44px,9vw,130px);line-height:1;margin:10px 0 6px;color:var(--accent);text-wrap:balance;overflow-wrap:anywhere}
   .rank{display:grid;gap:12px;margin-top:28px}
@@ -111,52 +118,47 @@
   }
 
   /* ---------- escenarios ---------- */
+  function roster(teams) {
+    var ul = el('ul', 'roster' + (teams.length > 4 ? ' cols' : ''));
+    teams.forEach(function (t) { ul.appendChild(el('li', null, t.name)); });
+    return ul;
+  }
   function stageSignup(s) {
-    var g = el('div', 'grid');
-    var left = el('div');
-    left.appendChild(qrBlock('/', 'Código QR para inscribirse'));
+    var g = el('div', 'grid3');
+    var center = el('div', 'center');
+    center.appendChild(el('div', 'phase', 'Escaneá para ingresar'));
+    center.appendChild(qrBlock('/', 'Código QR para inscribirse'));
     var right = el('div', 'side');
     right.appendChild(el('div', 'phase', 'Equipos inscriptos'));
-    if (!s.teams.length) {
-      right.appendChild(el('p', 'empty', 'Esperando equipos…'));
-    } else {
-      var ul = el('ul', 'roster' + (s.teams.length > 4 ? ' cols' : ''));
-      s.teams.forEach(function (t) { ul.appendChild(el('li', null, t.name)); });
-      right.appendChild(ul);
-    }
-    g.appendChild(left); g.appendChild(right);
+    if (!s.teams.length) right.appendChild(el('p', 'empty', 'Esperando equipos…'));
+    else right.appendChild(roster(s.teams));
+    g.appendChild(el('div')); g.appendChild(center); g.appendChild(right);
     return g;
   }
   function stageVoting(s) {
-    var g = el('div', 'grid');
-    var left = el('div');
-    left.appendChild(el('h2', 'big-title', 'Llegó la hora de votar'));
-    left.appendChild(el('p', 'lead', 'Escaneen el código y voten al mejor equipo. Un solo voto por persona.'));
-    left.appendChild(qrBlock('/votar', 'Código QR para votar'));
+    var g = el('div', 'grid3');
+    var center = el('div', 'center');
+    center.appendChild(el('div', 'phase', 'Llegó la hora de votar al mejor equipo'));
+    center.appendChild(qrBlock('/votar', 'Código QR para votar'));
     var right = el('div', 'side');
-    var end = el('button', 'btn main bigbtn first', 'Cerrar votación y mostrar ganador'); end.type = 'button';
+    var end = el('button', 'btn main bigbtn first', 'Cerrar votación'); end.type = 'button';
     end.addEventListener('click', function () { goPhase('cerrada'); });
     right.appendChild(end);
-    right.appendChild(el('div', 'phase', 'Equipos en competencia'));
-    var ul = el('ul', 'roster' + (s.teams.length > 4 ? ' cols' : ''));
-    s.teams.forEach(function (t) { ul.appendChild(el('li', null, t.name)); });
-    right.appendChild(ul);
-    right.appendChild(el('p', 'votes', 'Votos recibidos: ' + s.totalVotes));
-    g.appendChild(left); g.appendChild(right);
+    right.appendChild(el('div', 'phase', 'Equipos'));
+    right.appendChild(roster(s.teams));
+    g.appendChild(el('div')); g.appendChild(center); g.appendChild(right);
     return g;
   }
   function stageResults(s) {
-    var box = el('div');
+    var box = el('div', 'winbox');
     var results = s.results || [];
     var winners = results.filter(function (r) { return (s.winners || []).indexOf(r.id) > -1; });
     if (!winners.length) {
-      box.appendChild(el('h2', 'big-title', 'Nadie votó'));
-      box.appendChild(el('p', 'lead', 'La votación cerró sin votos.'));
+      box.appendChild(el('div', 'winlabel', 'Nadie votó'));
       return box;
     }
-    box.appendChild(el('div', 'winlabel', winners.length > 1 ? 'Empate' : 'El mejor equipo'));
+    box.appendChild(el('div', 'winlabel', winners.length > 1 ? 'Empate entre' : 'El ganador es'));
     box.appendChild(el('div', 'winname', winners.map(function (w) { return w.name; }).join(' y ')));
-    box.appendChild(el('p', 'lead', winners[0].votes + (winners[0].votes === 1 ? ' voto' : ' votos')));
     var max = results[0].votes || 1, rank = el('div', 'rank');
     results.forEach(function (r) {
       var row = el('div', 'rrow' + (winners.indexOf(r) > -1 ? ' win' : ''));
@@ -167,16 +169,15 @@
       rank.appendChild(row);
     });
     box.appendChild(rank);
-    box.appendChild(el('p', 'total', 'Votos en total: ' + s.totalVotes));
     return box;
   }
 
   function paint() {
     var s = snap;
-    var sig = JSON.stringify([s.phase, s.teams, s.totalVotes, s.phase === 'cerrada' ? s.results : 0]);
+    var sig = JSON.stringify([s.phase, s.teams, s.phase === 'cerrada' ? s.results : 0]);
     if (sig === lastSig) return;
     lastSig = sig;
-    $('#phase').textContent = s.phase === 'inscripcion' ? '' : (PHASE_LABEL[s.phase] || '');
+    $('#phase').textContent = '';
     var stage = $('#stage'); stage.innerHTML = '';
     stage.appendChild(s.phase === 'inscripcion' ? stageSignup(s) : s.phase === 'votacion' ? stageVoting(s) : stageResults(s));
   }
