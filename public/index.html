@@ -101,10 +101,16 @@
         <button class="btn main block" id="signupBtn" type="submit">Inscribirnos</button>
       </form>
       <div id="signedUp" hidden>
-        <p class="msg ok" style="margin:0">Equipo inscripto: <b id="signedName"></b></p>
+        <p class="msg ok" style="margin:0 0 10px">Equipo inscripto: <b id="signedName"></b></p>
+        <button class="btn block" id="otherBtn" type="button">No es mi equipo / inscribir otro</button>
       </div>
     </div>
-    <p class="hint">Un solo integrante inscribe al equipo. El resto puede seguir desde su celular.</p>
+    <div class="card" id="teamsCard" hidden>
+      <h3 style="margin-top:0">Equipos inscriptos <span class="ph" id="teamCount">0</span></h3>
+      <p class="hint" style="margin:0 0 10px" id="teamHint">¿Tu equipo ya está? Tocalo para seguir con ese equipo, sin inscribirlo de nuevo.</p>
+      <div class="chips" id="teamList"></div>
+    </div>
+    <p class="hint">Cada equipo se inscribe una sola vez. Cualquiera puede abrir este enlace: si su equipo no está en la lista, inscríbanlo; si ya está, tóquenlo.</p>
   </div>
   <div class="dock"><button class="btn main" id="startBtn" type="button" data-go="marta" disabled>Empezar con Marta</button></div>
 </div>
@@ -366,17 +372,40 @@
     $('#signupForm').hidden = registered || phase !== 'inscripcion';
     $('#signedUp').hidden = !registered;
     if (registered) $('#signedName').textContent = team.name;
+    paintTeams();
     var canStart = registered || (phase && phase !== 'inscripcion');
     $('#startBtn').disabled = !canStart;
     if (!registered && phase && phase !== 'inscripcion') {
       setMsg('La inscripción ya cerró. Pueden leer el recorrido igual.', 'info');
     }
   }
+  var teams = [];
+  function paintTeams() {
+    var card = $('#teamsCard'), list = $('#teamList');
+    card.hidden = !teams.length;
+    $('#teamCount').textContent = teams.length;
+    var sig = JSON.stringify([teams.map(function (t) { return t.id; }), team && team.id, phase]);
+    if (sig === paintTeams.sig) return;
+    paintTeams.sig = sig;
+    list.innerHTML = '';
+    teams.forEach(function (t) {
+      var mine = team && team.id === t.id;
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'chip' + (mine ? ' mine' : '');
+      b.textContent = (mine ? '✓ ' : '') + t.name;
+      b.addEventListener('click', function () { saveTeam({ id: t.id, name: t.name }); paintSignup(); });
+      list.appendChild(b);
+    });
+  }
+  $('#otherBtn').addEventListener('click', function () {
+    saveTeam(null); $('#teamName').value = ''; paintSignup(); $('#teamName').focus();
+  });
   function refresh() {
     return fetch('/api/estado', { cache: 'no-store' })
       .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || 'error'); return j; }); })
       .then(function (s) {
         phase = s.phase;
+        teams = s.teams || [];
         if (team && !s.teams.some(function (t) { return t.id === team.id; })) saveTeam(null);
         setMsg('', '');
         paintSignup();
@@ -458,6 +487,7 @@
   paintSignup();
   show('intro');
   refresh();
+  setInterval(function () { if (cur === 'intro') refresh(); }, 3000);
 })();
 </script>
 </body>

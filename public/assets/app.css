@@ -147,3 +147,6 @@ input[type=range]{width:100%;accent-color:var(--accent);margin:14px 0 6px;height
 .defensa .tag{display:inline-block;font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:var(--accent);color:var(--accent-fg);border-radius:99px;padding:3px 10px;margin-bottom:10px}
 .defensa .steps{margin-top:12px}
 .defensa .frame{background:var(--surface2)}
+
+button.chip{font:inherit;color:var(--fg);cursor:pointer;min-height:44px}
+.chip.mine{border-color:var(--accent);background:var(--surface2);font-weight:600}
