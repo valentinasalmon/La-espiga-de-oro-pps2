@@ -24,6 +24,7 @@
   .roster.cols{grid-template-columns:repeat(2,minmax(0,1fr))}
   .roster.cols li{font-size:clamp(16px,2vw,32px)}
   .roster li.new{border-color:var(--accent)}
+  .bigbtn.first{margin:0 0 clamp(18px,2.4vw,36px)}
   .bigbtn{margin-top:clamp(16px,2.4vw,36px);min-height:clamp(54px,6vw,84px);font-size:clamp(18px,2.2vw,34px);padding:0 clamp(20px,2.6vw,40px);font-family:var(--f-display);width:100%}
   .votes{font-family:var(--f-mono);font-size:clamp(16px,1.8vw,28px);color:var(--muted);margin:clamp(12px,1.6vw,22px) 0 0}
   @media (max-width:760px){.grid{grid-template-columns:minmax(0,1fr)}}
@@ -112,6 +113,9 @@
     left.appendChild(el('p', 'lead', 'Escaneen el código con el celular y escriban el nombre del equipo.'));
     left.appendChild(qrBlock('/', 'Código QR para inscribirse'));
     var right = el('div', 'side');
+    var go = el('button', 'btn main bigbtn first', 'Llegó la hora de votar'); go.type = 'button';
+    go.addEventListener('click', function () { goPhase('votacion'); });
+    right.appendChild(go);
     right.appendChild(el('div', 'phase', 'Equipos inscriptos'));
     if (!s.teams.length) {
       right.appendChild(el('p', 'empty', 'Esperando equipos…'));
@@ -120,9 +124,6 @@
       s.teams.forEach(function (t) { ul.appendChild(el('li', null, t.name)); });
       right.appendChild(ul);
     }
-    var go = el('button', 'btn main bigbtn', 'Llegó la hora de votar'); go.type = 'button';
-    go.addEventListener('click', function () { goPhase('votacion'); });
-    right.appendChild(go);
     g.appendChild(left); g.appendChild(right);
     return g;
   }
@@ -133,14 +134,14 @@
     left.appendChild(el('p', 'lead', 'Escaneen el código y voten al mejor equipo. Un solo voto por persona.'));
     left.appendChild(qrBlock('/votar', 'Código QR para votar'));
     var right = el('div', 'side');
+    var end = el('button', 'btn main bigbtn first', 'Cerrar votación y mostrar ganador'); end.type = 'button';
+    end.addEventListener('click', function () { goPhase('cerrada'); });
+    right.appendChild(end);
     right.appendChild(el('div', 'phase', 'Equipos en competencia'));
     var ul = el('ul', 'roster' + (s.teams.length > 4 ? ' cols' : ''));
     s.teams.forEach(function (t) { ul.appendChild(el('li', null, t.name)); });
     right.appendChild(ul);
     right.appendChild(el('p', 'votes', 'Votos recibidos: ' + s.totalVotes));
-    var end = el('button', 'btn bigbtn', 'Cerrar votación y mostrar ganador'); end.type = 'button';
-    end.addEventListener('click', function () { goPhase('cerrada'); });
-    right.appendChild(end);
     g.appendChild(left); g.appendChild(right);
     return g;
   }
