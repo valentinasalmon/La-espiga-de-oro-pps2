@@ -23,7 +23,7 @@ Se cambian desde `/resultados` → **Administrar** → ingresar el PIN.
 ## Publicar en Vercel (cuenta nueva)
 
 1. En Vercel: **Add New → Project → Import Git Repository** y elegir este repo. No hace falta tocar el build.
-2. En el proyecto: **Storage → Create → Upstash → Redis** (plan gratis) y conectarlo al proyecto en todos los entornos (agrega `KV_REST_API_URL` y `KV_REST_API_TOKEN`, o las `UPSTASH_REDIS_REST_*`).
+2. En el proyecto: **Storage → Create → Redis** (plan Free, High Availability en None) y conectarlo al proyecto en todos los entornos. Sirve `REDIS_URL` (TCP) o las variables REST (`*_REST_API_URL` y `*_REST_API_TOKEN`).
 3. **Settings → Environment Variables**: crear `ADMIN_PIN` con el PIN que quieras.
 4. **Deployments → Redeploy** para que tome las variables.
 5. Abrir `/resultados`: los QR ya apuntan al dominio real.
