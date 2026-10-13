@@ -1,6 +1,6 @@
 # La Espiga de Oro
 
-Experiencia web para el taller de **Ingeniería de Requerimientos**: los equipos se inscriben escaneando un QR, pasan por Marta (la dueña), el arquitecto y el gestor, ajustan la perilla de disponibilidad, preparan su defensa de 1 minuto y al final compañeros y profes votan al mejor equipo.
+Experiencia web para el taller de **Ingeniería de Requerimientos**: los equipos se inscriben escaneando un QR, pasan por Marta (la dueña), el arquitecto y gestión de expectativas, ajustan la perilla de disponibilidad, preparan su defensa de 1 minuto y al final compañeros y profes votan al mejor equipo.
 
 Las tareas escritas (las 5 necesidades, RF/RNF, historia de usuario y criterio de aceptación) se hacen **en papel**; la web reemplaza a los personajes.
 
@@ -8,7 +8,7 @@ Las tareas escritas (las 5 necesidades, RF/RNF, historia de usuario y criterio d
 
 | Ruta | Para quién | Qué hace |
 |---|---|---|
-| `/` | Equipos | Qué es La Espiga de Oro, inscripción y recorrido Marta → Arquitecto → Gestor → perilla y defensa → final |
+| `/` | Equipos | Qué es La Espiga de Oro, inscripción y recorrido Marta → Arquitecto → Gestión de expectativas → perilla y defensa → final |
 | `/votar` | Compañeros y profes | Lista de equipos, un solo voto por celular |
 | `/resultados` | Proyector (la docente) | QR de inscripción, QR de votación, conteo en vivo y ganador. Botón **Administrar** (PIN) para cambiar de fase |
 
