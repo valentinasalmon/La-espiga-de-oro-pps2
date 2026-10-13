@@ -120,7 +120,7 @@
       <div class="is-marta"><svg class="avs" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-marta"/></svg><span><b>Marta</b><small>La dueña. Cuenta qué quiere para su panadería.</small></span></div>
       <div class="is-arq"><svg class="avs" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-arq"/></svg><span><b>El arquitecto</b><small>Explica cómo se construye la aplicación.</small></span></div>
       <div class="is-ges"><svg class="avs" viewBox="0 0 64 64" aria-hidden="true"><use href="#ch-ges"/></svg><span><b>El gestor</b><small>Cuida el dinero y el tiempo del proyecto.</small></span></div>
-      <div><span class="n">4</span><span><b>La perilla</b><small>Ustedes toman una decisión y la defienden en 2 minutos.</small></span></div>
+      <div><span class="n">4</span><span><b>La perilla</b><small>Ustedes toman una decisión y la defienden en 1 minuto.</small></span></div>
     </div>
     <p class="hint">Lo que averigüen lo escriben en la hoja del equipo.</p>
   </div>
@@ -252,7 +252,7 @@
 <!-- 4 PERILLA Y DEFENSA -->
 <div id="v-def" hidden>
   <div class="view">
-    <div class="todo"><b>En la hoja</b>Elijan un nivel y escriban los puntos de su defensa. Cada equipo la cuenta en 2 minutos.</div>
+    <div class="todo"><b>En la hoja</b>Elijan un nivel y escriban los puntos de su defensa. Cada equipo la cuenta en 1 minuto.</div>
     <h2>La perilla de la disponibilidad</h2>
     <p class="lead" style="margin-top:6px">La disponibilidad es el porcentaje del tiempo que la aplicación funciona. Muevan la perilla y miren qué pasa con el costo.</p>
 
@@ -264,17 +264,12 @@
       <div class="mini">
         <div><span class="l">La aplicación estaría caída al año</span><span class="v" id="s-year"></span></div>
         <div><span class="l">Servidores</span><span class="v" id="s-infra"></span></div>
-        <div><span class="l">Ventas perdidas al año</span><span class="v" id="s-loss"></span></div>
+        <div><span class="l">Ventas perdidas al año (peor caso)</span><span class="v" id="s-loss"></span></div>
       </div>
       <p id="arq" style="margin:0 0 10px"></p>
       <p id="flag" style="margin:0"></p>
     </div>
 
-    <h3>¿Cuándo creen que se cae?</h3>
-    <div class="seg" role="group" aria-label="Cuándo se cae">
-      <button id="m-avg" type="button" aria-pressed="true">En cualquier momento del día</button>
-      <button id="m-peak" type="button" aria-pressed="false">En los horarios de más ventas</button>
-    </div>
     <p class="hint" id="picoNote"></p>
 
     <h3>Costo total de cada nivel</h3>
@@ -283,12 +278,11 @@
 
     <section class="defensa" aria-labelledby="defTitle">
       <span class="tag">Al final</span>
-      <h2 id="defTitle">Su defensa de 2 minutos</h2>
+      <h2 id="defTitle">Su defensa de 1 minuto</h2>
       <ol class="steps">
-        <li><b>Qué eligieron:</b> el nivel de disponibilidad.</li>
-        <li><b>Por qué:</b> usen un número del caso.</li>
+        <li><b>Qué eligieron y por qué:</b> el nivel, con un número que vean en la pantalla.</li>
         <li><b>El riesgo:</b> qué puede salir mal con esa decisión.</li>
-        <li><b>Lo que suponen:</b> algo que dan por cierto aunque no lo saben. Por ejemplo, cuándo se cae la aplicación.</li>
+        <li><b>Lo que suponen:</b> algo que dan por cierto. Por ejemplo, que la caída no ocurre en los horarios de más ventas.</li>
       </ol>
       <div class="frame">Elegimos [nivel] porque [número]. El riesgo es [riesgo]. Suponemos que [supuesto].</div>
       <p class="hint" style="margin:12px 0 0">Pueden repartirse las partes entre el equipo. Hablen sin leer la hoja.</p>
@@ -302,7 +296,7 @@
   <div class="view fin">
     <div class="done" aria-hidden="true">✓</div>
     <h2>Completaron los cuatro pasos</h2>
-    <p class="lead"><span id="finTeam"></span>Terminen la hoja, ensayen la defensa de 2 minutos y esperen su turno.</p>
+    <p class="lead"><span id="finTeam"></span>Terminen la hoja, ensayen la defensa de 1 minuto y esperen su turno.</p>
     <button class="btn" data-go="marta" type="button">Volver a leer</button>
   </div>
 </div>
@@ -469,8 +463,8 @@
     { name: '99,9 %',  p: 99.9,  infra: 900,  arq: 'Dos servidores. Si uno se cae, el otro sigue atendiendo solo.' },
     { name: '99,99 %', p: 99.99, infra: 4500, arq: 'Servidores en varios lugares y un equipo de guardia las 24 horas. Es mucho más de lo que puede manejar un equipo de dos.' }
   ];
-  var CAP = 1000, HOURS = 8760, AVG = 50, PEAK = 190;
-  var peak = false, idx = 1;
+  var CAP = 1000, HOURS = 8760, PEAK = 190;
+  var idx = 1;
   var nf0 = new Intl.NumberFormat('es-AR', { maximumFractionDigits: 0 });
   var nf1 = new Intl.NumberFormat('es-AR', { maximumFractionDigits: 1 });
   function money(v) { return 'US$ ' + nf0.format(Math.round(v)); }
@@ -480,7 +474,7 @@
     return nf0.format(h * 60) + ' minutos';
   }
   function calc(l) {
-    var down = (100 - l.p) / 100 * HOURS, loss = down * (peak ? PEAK : AVG), infraYear = l.infra * 12;
+    var down = (100 - l.p) / 100 * HOURS, loss = down * PEAK, infraYear = l.infra * 12;
     return { down: down, loss: loss, infraYear: infraYear, total: infraYear + loss };
   }
   function render() {
@@ -493,11 +487,7 @@
     $('#flag').innerHTML = l.infra > CAP
       ? '<span class="pill bad">Pasa el tope del gestor (' + money(CAP) + ' por mes)</span>'
       : '<span class="pill good">Entra en el tope del gestor (' + money(CAP) + ' por mes)</span>';
-    $('#m-avg').setAttribute('aria-pressed', peak ? 'false' : 'true');
-    $('#m-peak').setAttribute('aria-pressed', peak ? 'true' : 'false');
-    $('#picoNote').textContent = peak
-      ? 'Cada hora caída en esos horarios cuesta ' + money(PEAK) + ' en ventas.'
-      : 'Cada hora caída cuesta ' + money(AVG) + ' en ventas, el promedio de un día completo.';
+    $('#picoNote').textContent = 'Cada hora caída en los horarios de más ventas (7 a 10 y 17 a 19) cuesta ' + money(PEAK) + '. Las ventas perdidas están calculadas en el peor caso: que toda la caída ocurra en esos horarios.';
     var all = LV.map(calc), max = Math.max.apply(null, all.map(function (x) { return x.total; }));
     var html = '';
     all.forEach(function (x, i) {
@@ -508,8 +498,6 @@
     $('#bars').innerHTML = html;
   }
   $('#nivel').addEventListener('input', function (e) { idx = parseInt(e.target.value, 10); render(); });
-  $('#m-avg').addEventListener('click', function () { peak = false; render(); });
-  $('#m-peak').addEventListener('click', function () { peak = true; render(); });
   render();
 
   /* ---------- arranque ---------- */
