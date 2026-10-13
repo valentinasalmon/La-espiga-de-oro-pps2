@@ -23,12 +23,12 @@ Se cambian desde `/resultados` → **Administrar** → ingresar el PIN.
 ## Publicar en Vercel (cuenta nueva)
 
 1. En Vercel: **Add New → Project → Import Git Repository** y elegir este repo. No hace falta tocar el build.
-2. En el proyecto: **Storage → Create → Blob**. Elegir acceso **Public** y conectarlo al proyecto (agrega `BLOB_STORE_ID`; con eso alcanza, no hace falta el token).
+2. En el proyecto: **Storage → Create → Upstash → Redis** (plan gratis) y conectarlo al proyecto en todos los entornos (agrega `KV_REST_API_URL` y `KV_REST_API_TOKEN`, o las `UPSTASH_REDIS_REST_*`).
 3. **Settings → Environment Variables**: crear `ADMIN_PIN` con el PIN que quieras.
 4. **Deployments → Redeploy** para que tome las variables.
 5. Abrir `/resultados`: los QR ya apuntan al dominio real.
 
-> Si falta el Blob, la web muestra "Falta conectar el almacenamiento Blob…".
+> Si falta la base, la web muestra "Falta conectar la base de datos (Upstash Redis)…". Si no hay Redis pero sí Blob, usa Blob (que en plan Hobby tiene un tope mensual de operaciones bajo).
 
 ## Correr en tu compu
 
@@ -51,14 +51,14 @@ En local los datos van a `.data/` y el PIN de prueba es `1234`.
 
 - El "un voto por celular" se guarda en el navegador: con otro navegador o modo incógnito se podría votar de nuevo. Alcanza para una clase, no para una votación formal.
 - No se guardan datos personales: solo nombres de equipo y votos.
-- Vercel Blob se usa como base mínima (archivos vacíos con los datos en el nombre). Máximo 40 equipos y 1000 votos.
+- Redis guarda un único hash con los datos en el nombre de cada campo. Máximo 40 equipos y 1000 votos. Las pantallas consultan cada 4–5 s y el estado público se cachea 2 s en el borde de Vercel para gastar pocas operaciones.
 
 ## Estructura
 
 ```
 public/        páginas estáticas (alumnos, votar, resultados, assets)
 api/           funciones serverless (estado, equipos, votar, admin)
-lib/           almacenamiento (Blob o carpeta local) y reglas
+lib/           almacenamiento (Redis, Blob o carpeta local) y reglas
 dev-server.js  servidor local
-scripts/       prueba de la API
+scripts/       prueba de la API y falso Redis para probar
 ```

@@ -111,10 +111,15 @@
     vb.textContent = selected ? 'Votar a ' + teamName(selected) : 'Elegí un equipo';
   }
 
-  function load() {
-    return fetch('/api/estado?voter=' + encodeURIComponent(voter), { cache: 'no-store' })
+  var myVote = null, haveMine = false;
+  // La consulta con voter no se cachea; las periódicas van sin voter (caché de borde) para gastar poco.
+  function load(withVoter) {
+    var url = withVoter || !haveMine ? '/api/estado?voter=' + encodeURIComponent(voter) : '/api/estado';
+    return fetch(url, { cache: 'no-store' })
       .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || 'error'); return j; }); })
       .then(function (s) {
+        if (url.indexOf('voter=') > -1) { myVote = s.myVote || null; haveMine = true; }
+        s.myVote = myVote;
         snap = s;
         if (selected && !s.teams.some(function (t) { return t.id === selected; })) selected = null;
         msg('', '');
@@ -133,14 +138,14 @@
       .then(function (res) {
         if (!res.ok && res.j.error) msg(res.j.error, 'err'); else msg('', '');
         lastSig = '';
-        return load();
+        return load(true);
       })
       .catch(function () { msg('No se pudo enviar. Revisá tu internet y probá de nuevo.', 'err'); })
       .then(function () { sending = false; lastSig = ''; if (snap) paint(); });
   });
 
-  load();
-  setInterval(function () { if (!sending) load(); }, 4000);
+  load(true);
+  setInterval(function () { if (!sending && !document.hidden) load(false); }, 5000);
 })();
 </script>
 </body>

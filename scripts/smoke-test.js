@@ -2,7 +2,7 @@
 /* Prueba de punta a punta de la API contra el servidor local (usa la carpeta .data). */
 const assert = require('assert');
 
-process.env.ADMIN_PIN = '';
+if (process.env.ADMIN_PIN === undefined) process.env.ADMIN_PIN = '';
 const server = require('../dev-server');
 
 async function call(base, method, url, body) {

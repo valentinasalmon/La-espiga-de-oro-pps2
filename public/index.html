@@ -517,7 +517,7 @@
   paintSignup();
   show('intro');
   refresh();
-  setInterval(function () { if (cur === 'intro') refresh(); }, 3000);
+  setInterval(function () { if (cur === 'intro' && !document.hidden) refresh(); }, 5000);
 })();
 </script>
 </body>
